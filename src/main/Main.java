@@ -22,8 +22,8 @@ public class Main {
 		EV3LargeRegulatedMotor LEFT_MOTOR = new EV3LargeRegulatedMotor(MotorPort.D);
 		EV3LargeRegulatedMotor RIGHT_MOTOR = new EV3LargeRegulatedMotor(MotorPort.A);
 		
-		Wheel leftWheel = WheeledChassis.modelWheel(LEFT_MOTOR, 123.123).offset(123.123);
-		Wheel rightWheel = WheeledChassis.modelWheel(RIGHT_MOTOR, 123.123).offset(123.123);
+		Wheel leftWheel = WheeledChassis.modelWheel(LEFT_MOTOR, 4.2).offset(-5.5);
+		Wheel rightWheel = WheeledChassis.modelWheel(RIGHT_MOTOR, 4.2).offset(5.5);
 		
 		Chassis chassis = new WheeledChassis(new Wheel[] {leftWheel, rightWheel}, WheeledChassis.TYPE_DIFFERENTIAL);
 		
@@ -33,12 +33,20 @@ public class Main {
 		ArrayList<Boolean> walls = wallChecker.check(0);
 		if (walls.get(0) == true)
 			LCD.drawString("North: yes", 0, 0);
+		else
+			LCD.drawString("North: no", 0, 0);
 		if (walls.get(1) == true)
-			LCD.drawString("East: yes", 10, 0);
+			LCD.drawString("East: yes", 0, 15);
+		else
+			LCD.drawString("East: no", 0, 15);
 		if (walls.get(2) == true)
-			LCD.drawString("South: yes", 20, 0);
+			LCD.drawString("South: yes", 0, 30);
+		else
+			LCD.drawString("South: no", 0, 30);
 		if (walls.get(3) == true)
-			LCD.drawString("West: yes", 30, 0);
+			LCD.drawString("West: yes", 0, 45);
+		else
+			LCD.drawString("West: no", 0, 45);
 		Delay.msDelay(10000);
 	}
 }

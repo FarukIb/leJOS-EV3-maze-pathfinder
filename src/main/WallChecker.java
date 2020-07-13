@@ -6,6 +6,7 @@ import java.util.Vector;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.MovePilot;
+import lejos.utility.Delay;
 
 public class WallChecker {
 	private MovePilot pilot;
@@ -18,6 +19,7 @@ public class WallChecker {
 		pilot = setPilot;
 		irSensor = setSens;
 		sampleProvider = irSensor.getDistanceMode();
+		sample = new float[sampleProvider.sampleSize()];
 	}
 	
 	public ArrayList<Boolean> check(int direction)
@@ -27,7 +29,7 @@ public class WallChecker {
 		ArrayList<Boolean> list = new ArrayList<Boolean>();
 		for (; directionT < 4; directionT++)
 		{
-			irSensor.fetchSample(sample, 0);
+			sampleProvider.fetchSample(sample, 0);
 			if (sample[0] <= 5)
 			{
 				if (direction == 0)
@@ -40,11 +42,12 @@ public class WallChecker {
 					d = true;
 			}
 			pilot.rotate(90.0);
+			Delay.msDelay(500);
 		}
 		for (int i = 0; i < direction; i++)
 		{
-			irSensor.fetchSample(sample, 0);
-			if (sample[0] <= 5)
+			sampleProvider.fetchSample(sample, 0);
+			if (sample[0] <= 15)
 			{
 				if (direction == 0)
 					a = true;
@@ -56,6 +59,7 @@ public class WallChecker {
 					d = true;
 			}
 			pilot.rotate(90.0);
+			Delay.msDelay(500);
 		}
 		list.add(a);
 		list.add(b);
