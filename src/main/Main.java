@@ -11,6 +11,8 @@ import lejos.robotics.chassis.Chassis;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
+import lejos.robotics.navigation.Navigator;
+import lejos.robotics.navigation.Waypoint;
 import lejos.utility.Delay;
 
 public class Main {
@@ -28,25 +30,20 @@ public class Main {
 		Chassis chassis = new WheeledChassis(new Wheel[] {leftWheel, rightWheel}, WheeledChassis.TYPE_DIFFERENTIAL);
 		
 		MovePilot pilot = new MovePilot(chassis);
+		Navigator navigator = new Navigator(pilot);
 		
-		WallChecker wallChecker = new WallChecker(pilot, IRSensor);
-		ArrayList<Boolean> walls = wallChecker.check(0);
-		if (walls.get(0) == true)
-			LCD.drawString("North: yes", 0, 0);
-		else
-			LCD.drawString("North: no", 0, 0);
-		if (walls.get(1) == true)
-			LCD.drawString("East: yes", 0, 15);
-		else
-			LCD.drawString("East: no", 0, 15);
-		if (walls.get(2) == true)
-			LCD.drawString("South: yes", 0, 30);
-		else
-			LCD.drawString("South: no", 0, 30);
-		if (walls.get(3) == true)
-			LCD.drawString("West: yes", 0, 45);
-		else
-			LCD.drawString("West: no", 0, 45);
-		Delay.msDelay(10000);
+		Waypoint a = new Waypoint(0, 25.0);
+		Waypoint b = new Waypoint(25.0, 25.0);
+		Waypoint c = new Waypoint(25.0, 0);
+		Waypoint d = new Waypoint(0, 0);
+		
+		pilot.forward();
+		Delay.msDelay(500);
+		pilot.stop();
+		
+		navigator.goTo(a);
+		navigator.goTo(b);
+		navigator.goTo(c);
+		navigator.goTo(d);
 	}
 }
