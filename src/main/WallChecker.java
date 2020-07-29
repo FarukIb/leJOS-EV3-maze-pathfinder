@@ -27,10 +27,12 @@ public class WallChecker {
 		int directionT = direction;
 		Boolean a = false, b = false, c = false, d = false;
 		ArrayList<Boolean> list = new ArrayList<Boolean>();
+		for (int i = 0; i < 4; i++)
+			list.add(false);
 		for (; directionT < 4; directionT++)
 		{
 			sampleProvider.fetchSample(sample, 0);
-			if (sample[0] <= 5)
+			if (sample[0] >= 10)
 			{
 				if (direction == 0)
 					a = true;
@@ -47,7 +49,7 @@ public class WallChecker {
 		for (int i = 0; i < direction; i++)
 		{
 			sampleProvider.fetchSample(sample, 0);
-			if (sample[0] <= 15)
+			if (sample[0] >= 10)
 			{
 				if (direction == 0)
 					a = true;
@@ -61,10 +63,10 @@ public class WallChecker {
 			pilot.rotate(90.0);
 			Delay.msDelay(500);
 		}
-		list.add(a);
-		list.add(b);
-		list.add(c);
-		list.add(d);
+		list.set(0, a);
+		list.set(1, b);
+		list.set(2, c);
+		list.set(3, d);
 		
 		return list;
 	}
