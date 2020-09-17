@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import lejos.hardware.Sound;
 import lejos.robotics.navigation.Navigator;
 import lejos.robotics.navigation.Waypoint;
 
 public class InterNavigator {
+	private Map<Short, ArrayList<Short> > graph;
 	private Map<Short, Waypoint> translator;
 	private MyNavigator pilot;
 	private short currWp;
@@ -19,7 +21,11 @@ public class InterNavigator {
 	
 	public InterNavigator(MyNavigator nav) {
 		translator = new HashMap<Short, Waypoint>();
-		translator.put((short) 1, new Waypoint(0, 0));
+		translator.put((short) 1, new Waypoint(100, 100));
+		
+		graph = new HashMap<Short, ArrayList<Short> >();
+		for (short i = 0; i < 1000; i++)
+			graph.put(i, new ArrayList<Short>());
 		
 		pilot = nav;
 		currWp = 1;
@@ -27,6 +33,11 @@ public class InterNavigator {
 	}
 	
 	// UTILITY
+	
+	public void addToGraph(short a, ArrayList<Short> array)
+	{
+		graph.put(a, array);
+	}
 	
 	public int getDirection() {
 		return direction;
@@ -42,7 +53,7 @@ public class InterNavigator {
 	
 	public Pair<Float, Float> getGridCords(short num)
 	{
-		Pair<Float, Float> cords = new Pair<Float, Float>(translator.get(num).x / 25 + 100, translator.get(num).y / 25 + 100);
+		Pair<Float, Float> cords = new Pair<Float, Float>(translator.get(num).x, translator.get(num).y);
 		return cords;
 	}
 	
@@ -60,14 +71,14 @@ public class InterNavigator {
 		Waypoint southWp = null;
 		Waypoint eastWp = null;
 		
-		if (result.get(NORTH) == true)
-			northWp = new Waypoint(translator.get(currWp).x, translator.get(currWp).y + 25);
-		if (result.get(EAST) == true)
-			westWp = new Waypoint(translator.get(currWp).x + 25, translator.get(currWp).y);
-		if (result.get(SOUTH) == true)
-			southWp = new Waypoint(translator.get(currWp).x, translator.get(currWp).y - 25);
-		if (result.get(WEST) == true)
-			eastWp = new Waypoint(translator.get(currWp).x - 25, translator.get(currWp).y);
+		if (result.get(NORTH) == false)
+			northWp = new Waypoint(translator.get(currWp).x, translator.get(currWp).y + 1);
+		if (result.get(EAST) == false)
+			westWp = new Waypoint(translator.get(currWp).x + 1, translator.get(currWp).y);
+		if (result.get(SOUTH) == false)
+			southWp = new Waypoint(translator.get(currWp).x, translator.get(currWp).y - 1);
+		if (result.get(WEST) == false)
+			eastWp = new Waypoint(translator.get(currWp).x - 1, translator.get(currWp).y);
 		
 		if (northWp != null)
 			addWaypoint(northWp);
@@ -83,32 +94,39 @@ public class InterNavigator {
 	
 	private ArrayList<Short> path;
 	private Map<Short, Boolean> visited;
-	public void moveFromTo(short start, short end, Map<Short, ArrayList<Short> > graph) {
+	public void moveFromTo(short start, short end) throws InterruptedException {
 		path = new ArrayList<Short>();
+		
 		visited = new HashMap<Short, Boolean>();
-		dfs(start, end, new ArrayList<Short>(), graph);
-		move(graph);
+		for (short i = 1; i <= 1000; i++)
+			visited.put(i, false);
+		
+		dfs(start, end, new ArrayList<Short>());
+		
+		move();
+		
 		currWp = end;
 	}
 	
-	private void updateDirection(int last, int penult)
+	private void updateDirection(short last, short penult)
 	{
 		direction = pilot.getDir(translator.get(last), translator.get(penult));
 	}
 	
-	private void move(Map<Short, ArrayList<Short> > graph) {
-		int n = 0, last = 0, penult = 0;
+	private void move() throws InterruptedException {
+		int n = 0;
+		short last = 0, penult = 0;
 		
-		for (int i : path) {
+		for (short i : path) {
+			if (n == path.size() - 2)
+				penult = i;
+			else if (n == path.size() - 1)
+				last = i;
 			if (n == 0)
 			{
 				n++;
 				continue;
 			}
-			if (n == path.size() - 2)
-				penult = i;
-			else if (n == path.size() - 1)
-				last = i;
 			pilot.goTo(translator.get(i));
 			n++;
 		}
@@ -117,7 +135,7 @@ public class InterNavigator {
 			updateDirection(last, penult);
 	}
 	
-	private void dfs(short curr, short dest, ArrayList<Short> currPath, Map<Short, ArrayList<Short> > graph) {
+	private void dfs(short curr, short dest, ArrayList<Short> currPath) {
 		currPath.add(curr);
 		visited.put(curr, true);
 		
@@ -128,6 +146,6 @@ public class InterNavigator {
 		
 		for (int i = 0; i < graph.get(curr).size(); i++)
 			if (visited.get(graph.get(curr).get(i)) != true)
-				dfs(graph.get(curr).get(i), dest, new ArrayList<Short>(currPath), graph);
+				dfs(graph.get(curr).get(i), dest, new ArrayList<Short>(currPath));
 	}
 }

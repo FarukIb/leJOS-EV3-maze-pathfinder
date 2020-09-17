@@ -8,4 +8,9 @@ public class Pair<E, T> {
 		first = a;
 		second = b;
 	}
+	
+	public String toString()
+	{
+		return "[" + first.toString() + ", " + second.toString() + "]";
+	}
 }

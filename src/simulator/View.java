@@ -1,15 +1,22 @@
-package simulator;
+/*package simulator;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
 
+import dummies.DummyPilot;
+import dummies.DummySensor;
+import main.*;
+
 public class View extends JFrame {
+	private Maze maze;
+	private static DummyPilot pilot;
+	private static DummySensor sensor;
 	
 	public View() {
 		setTitle("Maze man");
-		setSize(700, 700);
+		setSize(1700, 1000);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -18,15 +25,33 @@ public class View extends JFrame {
 	
 	public void paint(Graphics g)
 	{
-		Color color = Color.BLACK;
-		g.setColor(color);
-		g.fillRect(30, 30, 50, 50);
+		maze = new Maze(g);
+		maze.draw();
+		
+		// I AM AWARE THAT THE CONNECTION BETWEEN PILOT AND SENSOR IS COULD BE DELT WITH BETTER
+		pilot = new DummyPilot(g, sensor);
+		sensor = new DummySensor(maze, pilot);
+		pilot.setSensor(sensor);
+		
+		MyNavigator nav = new MyNavigator(pilot);
+		WallChecker checker = new WallChecker(pilot, sensor);
+		
+		InterNavigator navig = new InterNavigator(nav);
+		
+		PathFinder pathFind = new PathFinder(navig, checker);
+		try {
+			pathFind.start();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public static void main(String args[])
+	public static void main(String args[]) throws InterruptedException
 	{
 		View view = new View();
 		view.setVisible(true);
 		
+		
 	}
 }
+*/

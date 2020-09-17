@@ -9,7 +9,6 @@ import lejos.robotics.navigation.Navigator;
 import lejos.robotics.navigation.Waypoint;
 
 public class PathFinder {
-	private Map<Short, ArrayList<Short> > graph;
 	private short gridGraph[][];
 	private InterNavigator interNavigator;
 	private WallChecker checker;
@@ -21,8 +20,6 @@ public class PathFinder {
 	public PathFinder(InterNavigator inter, WallChecker checke) {
 		interNavigator = inter;
 		checker = checke;
-		graph = new HashMap<Short, ArrayList<Short> >();
-		graph.put((short) 1, new ArrayList<Short>());
 		
 		gridGraph = new short[210][210];
 		for (int i = 0; i < 210; i++)
@@ -33,26 +30,27 @@ public class PathFinder {
 		toVisit = new Stack<Short>();
 		toVisit.push((short) 1);
 		
-		ArrayList<Pair<Integer, Integer> > sides = new ArrayList<Pair<Integer, Integer> >();
+		sides = new ArrayList<Pair<Integer, Integer> >();
 		for (int i = 0; i < 4; i++)
 			sides.add(new Pair<Integer, Integer>(0, 0));
-		sides.set(0, new Pair<Integer, Integer>(-1, 0)); // north
-		sides.set(1, new Pair<Integer, Integer>(0, 1)); //  east
-		sides.set(2, new Pair<Integer, Integer>(-1, 0)); // south
-		sides.set(3,  new Pair<Integer, Integer>(0, -1)); // west
+		sides.set(0, new Pair<Integer, Integer>(0, 1)); // north
+		sides.set(1, new Pair<Integer, Integer>(1, 0)); //  east
+		sides.set(2, new Pair<Integer, Integer>(0, -1)); // south
+		sides.set(3,  new Pair<Integer, Integer>(-1, 0)); // west
 	}
 	
-	public void start() {
+	public void start() throws InterruptedException {
 		while (!toVisit.isEmpty())
 		{
 			Short curr = toVisit.peek();
 			toVisit.pop();
-			interNavigator.moveFromTo(interNavigator.getCurrWp(), curr, graph);
+			if (curr != 1)
+				interNavigator.moveFromTo(interNavigator.getCurrWp(), curr);
 			updateGraph();
 		}
 	}
 	
-	private void updateGraph() {
+	private void updateGraph() throws InterruptedException {
 		ArrayList<Boolean> walls = checker.check(interNavigator.getDirection());
 		
 		Pair<Float, Float> currCordsFloat = interNavigator.getGridCords(interNavigator.getCurrWp());
@@ -65,23 +63,26 @@ public class PathFinder {
 		
 		ArrayList<Short> toAdd = new ArrayList<Short>();
 		for (int i = 0; i < 4; i++)  {
-			if (walls.get(i) == true)  {
+			if (walls.get(i) == false)  {
 				if (gridGraph[currCords.first + sides.get(i).first]
 						[currCords.second + sides.get(i).second] > 0) 
 				{
 					toAdd.add(gridGraph[currCords.first + sides.get(i).first]
 						[currCords.second + sides.get(i).second]);
-					walls.set(i, false); // this is so update in interNavigator does not register it as a new waypoint
+					walls.set(i, true); // this is so update in interNavigator does not register it as a new waypoint
 				}
 				else {
 					gridGraph[currCords.first + sides.get(i).first]
 							[currCords.second + sides.get(i).second] = nextWp;
+					
 					toAdd.add(nextWp);
+					toVisit.add(nextWp);
+					
 					nextWp++;
 				}
 			}
 		}
-		graph.put(interNavigator.getCurrWp(), toAdd);
+		interNavigator.addToGraph(interNavigator.getCurrWp(), toAdd);
 		
 		interNavigator.update(walls);
 	}

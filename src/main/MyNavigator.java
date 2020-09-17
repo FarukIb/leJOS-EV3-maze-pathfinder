@@ -1,5 +1,6 @@
 package main;
 
+import dummies.DummyPilot;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.navigation.Waypoint;
 
@@ -8,14 +9,14 @@ public class MyNavigator {
 	private int direction;
 	private Waypoint currWp;
 	
-	public MyNavigator(MovePilot a)
+	public MyNavigator(MovePilot pilot2)
 	{
-		currWp = new Waypoint(0, 0);
-		pilot = a;
+		currWp = new Waypoint(100, 100);
+		pilot = pilot2;
 		direction = 0;
 	}
 	
-	private void turnRight()
+	private void turnRight() throws InterruptedException
 	{
 		pilot.rotate(90);
 		direction++;
@@ -37,7 +38,7 @@ public class MyNavigator {
 		return cnt;
 	}
 	
-	private void turnLeft()
+	private void turnLeft() throws InterruptedException
 	{
 		pilot.rotate(-90);
 		direction--;
@@ -51,10 +52,10 @@ public class MyNavigator {
 		int fakeDir = direction;
 		while (fakeDir != toTurn)
 		{
-			fakeDir++;
+			fakeDir--;
 			cnt++;
-			if (fakeDir == 4)
-				fakeDir = 0;
+			if (fakeDir == -1)
+				fakeDir = 3;
 		}
 		return cnt;
 	}
@@ -71,7 +72,7 @@ public class MyNavigator {
 			return 3;
 	}
 	
-	public void goTo(Waypoint toGo)
+	public void goTo(Waypoint toGo) throws InterruptedException
 	{
 		int toTurn = getDir(toGo, currWp);
 		if (turnRightSim(toTurn) < turnLeftSim(toTurn))
@@ -84,7 +85,7 @@ public class MyNavigator {
 			while (direction != toTurn)
 				turnLeft();
 		}
-		pilot.travel(25);
+		pilot.travel(30);
 		currWp = toGo;
 	}
 }

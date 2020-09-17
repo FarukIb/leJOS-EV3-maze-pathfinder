@@ -3,6 +3,9 @@ package main;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import dummies.DummyPilot;
+import dummies.DummySensor;
+import lejos.hardware.Sound;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.MovePilot;
@@ -14,15 +17,15 @@ public class WallChecker {
 	private SampleProvider sampleProvider;
 	private float [] sample;
 	
-	public WallChecker(MovePilot setPilot, EV3IRSensor setSens)
+	public WallChecker(MovePilot pilot2, EV3IRSensor irSensor2)
 	{
-		pilot = setPilot;
-		irSensor = setSens;
-		sampleProvider = irSensor.getDistanceMode();
+		pilot = pilot2;
+		irSensor = irSensor2;
+		sampleProvider = irSensor.getDistanceMode(); //IRL TEST DECOMMENT
 		sample = new float[sampleProvider.sampleSize()];
 	}
 	
-	public ArrayList<Boolean> check(int direction)
+	public ArrayList<Boolean> check(int direction) throws InterruptedException
 	{
 		int directionT = direction;
 		Boolean a = false, b = false, c = false, d = false;
@@ -32,36 +35,62 @@ public class WallChecker {
 		for (; directionT < 4; directionT++)
 		{
 			sampleProvider.fetchSample(sample, 0);
-			if (sample[0] >= 10)
+			//sample = irSensor.fetchSample();
+			if (sample[0] <= 35)
 			{
-				if (direction == 0)
+				if (directionT == 0)
+				{
 					a = true;
-				if (direction == 1)
+					Sound.beep();
+				}
+				if (directionT == 1)
+				{
 					b = true;
-				if (direction == 2)
+					Sound.beep();
+				}
+				if (directionT == 2)
+				{
 					c = true;
-				if (direction == 3)
+					Sound.beep();
+				}
+				if (directionT == 3)
+				{
 					d = true;
+					Sound.beep();
+				}
 			}
-			pilot.rotate(90.0);
+			pilot.rotate(90);
 			Delay.msDelay(500);
 		}
 		for (int i = 0; i < direction; i++)
 		{
 			sampleProvider.fetchSample(sample, 0);
-			if (sample[0] >= 10)
+			//sample = irSensor.fetchSample();
+			if (sample[0] <= 35)
 			{
-				if (direction == 0)
+				if (i == 0)
+				{
 					a = true;
-				if (direction == 1)
+					Sound.beep();
+				}
+				if (i == 1)
+				{
 					b = true;
-				if (direction == 2)
+					Sound.beep();
+				}
+				if (i == 2)
+				{
 					c = true;
-				if (direction == 3)
+					Sound.beep();
+				}
+				if (i == 3)
+				{
 					d = true;
+					Sound.beep();
+				}
 			}
-			pilot.rotate(90.0);
-			Delay.msDelay(500);
+			pilot.rotate(90);
+			Delay.msDelay(100);
 		}
 		list.set(0, a);
 		list.set(1, b);
