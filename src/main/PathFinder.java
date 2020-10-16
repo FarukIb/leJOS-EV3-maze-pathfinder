@@ -51,7 +51,7 @@ public class PathFinder {
 	}
 	
 	private void updateGraph() throws InterruptedException {
-		ArrayList<Boolean> walls = checker.check(interNavigator.getDirection());
+		ArrayList<Boolean> walls = checker.check();
 		
 		Pair<Float, Float> currCordsFloat = interNavigator.getGridCords(interNavigator.getCurrWp());
 		Pair<Integer, Integer> currCords = new Pair<Integer, Integer>(

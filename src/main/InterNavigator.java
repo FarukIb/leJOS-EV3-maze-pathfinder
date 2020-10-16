@@ -13,7 +13,6 @@ public class InterNavigator {
 	private Map<Short, Waypoint> translator;
 	private MyNavigator pilot;
 	private short currWp;
-	private int direction;
 	public final int NORTH = 0;
 	public final int EAST = 1;
 	public final int SOUTH = 2;
@@ -29,18 +28,13 @@ public class InterNavigator {
 		
 		pilot = nav;
 		currWp = 1;
-		direction = 0;
 	}
 	
 	// UTILITY
-	
+
 	public void addToGraph(short a, ArrayList<Short> array)
 	{
 		graph.put(a, array);
-	}
-	
-	public int getDirection() {
-		return direction;
 	}
 	
 	public short getCurrWp() {
@@ -108,20 +102,10 @@ public class InterNavigator {
 		currWp = end;
 	}
 	
-	private void updateDirection(short last, short penult)
-	{
-		direction = pilot.getDir(translator.get(last), translator.get(penult));
-	}
-	
 	private void move() throws InterruptedException {
 		int n = 0;
-		short last = 0, penult = 0;
 		
 		for (short i : path) {
-			if (n == path.size() - 2)
-				penult = i;
-			else if (n == path.size() - 1)
-				last = i;
 			if (n == 0)
 			{
 				n++;
@@ -131,8 +115,6 @@ public class InterNavigator {
 			n++;
 		}
 		
-		if (last != 0 && penult != 0)
-			updateDirection(last, penult);
 	}
 	
 	private void dfs(short curr, short dest, ArrayList<Short> currPath) {

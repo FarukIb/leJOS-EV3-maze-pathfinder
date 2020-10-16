@@ -5,18 +5,23 @@ import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.navigation.Waypoint;
 
 public class MyNavigator {
-	private MovePilot pilot;
+	private DummyPilot pilot;
 	private int direction;
 	private Waypoint currWp;
 	
-	public MyNavigator(MovePilot pilot2)
+	public MyNavigator(DummyPilot pilot2)
 	{
 		currWp = new Waypoint(100, 100);
 		pilot = pilot2;
 		direction = 0;
 	}
 	
-	private void turnRight() throws InterruptedException
+	public int getDirection()
+	{
+		return direction;
+	}
+	
+	public void turnRight() throws InterruptedException
 	{
 		pilot.rotate(90);
 		direction++;
@@ -38,7 +43,7 @@ public class MyNavigator {
 		return cnt;
 	}
 	
-	private void turnLeft() throws InterruptedException
+	public void turnLeft() throws InterruptedException
 	{
 		pilot.rotate(-90);
 		direction--;

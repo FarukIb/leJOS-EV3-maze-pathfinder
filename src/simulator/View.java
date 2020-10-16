@@ -1,4 +1,4 @@
-/*package simulator;
+package simulator;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -34,7 +34,7 @@ public class View extends JFrame {
 		pilot.setSensor(sensor);
 		
 		MyNavigator nav = new MyNavigator(pilot);
-		WallChecker checker = new WallChecker(pilot, sensor);
+		WallChecker checker = new WallChecker(nav, sensor);
 		
 		InterNavigator navig = new InterNavigator(nav);
 		
@@ -54,4 +54,3 @@ public class View extends JFrame {
 		
 	}
 }
-*/

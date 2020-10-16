@@ -78,6 +78,11 @@ public class DummyPilot {
 		g.drawRect(50 + x * 100, 50 + y * 100, 100, 100);
 	}
 	
+	public void setDir(int x)
+	{
+		direction = x;
+	}
+	
 	public int getDir()
 	{
 		return direction;
@@ -101,6 +106,7 @@ public class DummyPilot {
 		if (direction == -1)
 			direction = 3;
 		clr = Color.WHITE;
+		Thread.sleep(500);
 		drawDir();
 	}
 	

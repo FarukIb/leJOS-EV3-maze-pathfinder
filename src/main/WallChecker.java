@@ -12,85 +12,94 @@ import lejos.robotics.navigation.MovePilot;
 import lejos.utility.Delay;
 
 public class WallChecker {
-	private MovePilot pilot;
-	private EV3IRSensor irSensor;
+	private MyNavigator pilot;
+	private DummySensor irSensor;
 	private SampleProvider sampleProvider;
 	private float [] sample;
 	
-	public WallChecker(MovePilot pilot2, EV3IRSensor irSensor2)
+	public WallChecker(MyNavigator pilot2, DummySensor sensor)
 	{
 		pilot = pilot2;
-		irSensor = irSensor2;
-		sampleProvider = irSensor.getDistanceMode(); //IRL TEST DECOMMENT
-		sample = new float[sampleProvider.sampleSize()];
+		irSensor = sensor;
+		//sampleProvider = irSensor.getDistanceMode(); //IRL TEST DECOMMENT
+		//sample = new float[sampleProvider.sampleSize()];
 	}
 	
-	public ArrayList<Boolean> check(int direction) throws InterruptedException
+	public ArrayList<Boolean> check() throws InterruptedException
 	{
-		int directionT = direction;
+		int direction = pilot.getDirection();
+		
+		int directionT = direction, turns = 0;
 		Boolean a = false, b = false, c = false, d = false;
 		ArrayList<Boolean> list = new ArrayList<Boolean>();
 		for (int i = 0; i < 4; i++)
 			list.add(false);
 		for (; directionT < 4; directionT++)
 		{
-			sampleProvider.fetchSample(sample, 0);
-			//sample = irSensor.fetchSample();
+			//sampleProvider.fetchSample(sample, 0);
+			sample = irSensor.fetchSample();
 			if (sample[0] <= 35)
 			{
 				if (directionT == 0)
 				{
 					a = true;
-					Sound.beep();
+					//Sound.beep();
 				}
 				if (directionT == 1)
 				{
 					b = true;
-					Sound.beep();
+					//Sound.beep();
 				}
 				if (directionT == 2)
 				{
 					c = true;
-					Sound.beep();
+					//Sound.beep();
 				}
 				if (directionT == 3)
 				{
 					d = true;
-					Sound.beep();
+					//Sound.beep();
 				}
 			}
-			pilot.rotate(90);
-			Delay.msDelay(500);
+			
+			if (turns < 3)
+			{
+				pilot.turnRight();
+				turns++;
+			}
 		}
 		for (int i = 0; i < direction; i++)
 		{
-			sampleProvider.fetchSample(sample, 0);
-			//sample = irSensor.fetchSample();
+			//sampleProvider.fetchSample(sample, 0);
+			sample = irSensor.fetchSample();
 			if (sample[0] <= 35)
 			{
 				if (i == 0)
 				{
 					a = true;
-					Sound.beep();
+					//Sound.beep();
 				}
 				if (i == 1)
 				{
 					b = true;
-					Sound.beep();
+					//Sound.beep();
 				}
 				if (i == 2)
 				{
 					c = true;
-					Sound.beep();
+					//Sound.beep();
 				}
 				if (i == 3)
 				{
 					d = true;
-					Sound.beep();
+					//Sound.beep();
 				}
 			}
-			pilot.rotate(90);
-			Delay.msDelay(100);
+			if (turns < 3)
+			{
+				pilot.turnRight();
+				turns++;
+			}
 		}
 		list.set(0, a);
 		list.set(1, b);

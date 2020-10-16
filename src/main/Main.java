@@ -1,4 +1,4 @@
-package main; //USE WHEN TESTING IRL
+/*package main; //USE WHEN TESTING IRL
 
 import java.util.ArrayList;
 
@@ -41,13 +41,13 @@ public class Main {
 		MyNavigator nav = new MyNavigator(pilot);
 		
 		EV3IRSensor irSensor = new EV3IRSensor(SensorPort.S1);
-		WallChecker wallChecker = new WallChecker(pilot, irSensor);
+		WallChecker wallChecker = new WallChecker(nav, irSensor);
 		
-		/*
+		
 		pilot.rotate(90.0);
 		Delay.msDelay(1000);
 		pilot.rotate(90.0);
-		*/
+		
 		
 		
 		InterNavigator interNavigator = new InterNavigator(nav);
@@ -56,7 +56,7 @@ public class Main {
 		pathFinder.start();
 		
 		
-		/*
+		
 		WallCheckerTest checker = new WallCheckerTest(wallChecker, EV3Brick.getTextLCD());
 		checker.start();
 		
@@ -66,6 +66,6 @@ public class Main {
 		
 		NavigationTester tester = new NavigationTester(nav);
 		tester.start();
-		*/
+		*
 	}
-}
+}*/

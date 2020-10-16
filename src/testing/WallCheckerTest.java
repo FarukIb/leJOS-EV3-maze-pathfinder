@@ -1,4 +1,4 @@
-package testing;
+/*package testing;
 
 import java.util.ArrayList;
 
@@ -31,3 +31,4 @@ public class WallCheckerTest {
 		LCD.drawString("W: " + walls.get(3).toString(), 0, 0);
 	}
 }
+*/
