@@ -2,7 +2,9 @@ package main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Stack;
 
 import lejos.robotics.navigation.Navigator;
@@ -13,7 +15,7 @@ public class PathFinder {
 	private InterNavigator interNavigator;
 	private WallChecker checker;
 	
-	private Stack<Short> toVisit;
+	private Queue<Short> toVisit;
 	
 	public ArrayList<Pair<Integer, Integer> > sides;
 	
@@ -27,8 +29,8 @@ public class PathFinder {
 				gridGraph[i][j] = 0;
 		gridGraph[100][100] = 1;
 		
-		toVisit = new Stack<Short>();
-		toVisit.push((short) 1);
+		toVisit = new LinkedList<Short>();
+		toVisit.add((short) 1);
 		
 		sides = new ArrayList<Pair<Integer, Integer> >();
 		for (int i = 0; i < 4; i++)
@@ -42,8 +44,7 @@ public class PathFinder {
 	public void start() throws InterruptedException {
 		while (!toVisit.isEmpty())
 		{
-			Short curr = toVisit.peek();
-			toVisit.pop();
+			Short curr = toVisit.poll();
 			if (curr != 1)
 				interNavigator.moveFromTo(interNavigator.getCurrWp(), curr);
 			updateGraph();
