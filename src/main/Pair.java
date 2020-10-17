@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Comparator;
+
 public class Pair<E, T> {
 	public E first;
 	public T second;
@@ -14,3 +16,4 @@ public class Pair<E, T> {
 		return "[" + first.toString() + ", " + second.toString() + "]";
 	}
 }
+
