@@ -31,7 +31,7 @@ public class PathFinder {
 				gridGraph[i][j] = 0;
 		gridGraph[100][100] = 1;
 		
-		toVisit = new PriorityQueue<Node>(100, new NodeComparator());
+		toVisit = new PriorityQueue<Node>(1, new NodeComparator());
 		toVisit.add(new Node((short) 1, 100, 100));
 		
 		sides = new ArrayList<Pair<Integer, Integer> >();
