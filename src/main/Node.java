@@ -23,10 +23,10 @@ class NodeComparator implements Comparator<Node> {
 
 	@Override
 	public int compare(Node arg0, Node arg1) {
-		int firstDiff = -arg0.coords.first + arg0.coords.second, secondDiff = -arg1.coords.first + arg1.coords.second;
-		if (firstDiff > secondDiff)
+		int firstDiff = arg0.coords.first + arg0.coords.second, secondDiff = arg1.coords.first + arg1.coords.second;
+		if (firstDiff < secondDiff)
 			return 1;
-		else if (firstDiff < secondDiff)
+		else if (firstDiff > secondDiff)
 			return -1;
 		return 0;
 	}
