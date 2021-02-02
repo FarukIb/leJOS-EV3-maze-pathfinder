@@ -1,4 +1,4 @@
-package simulator;
+/*package simulator;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -53,4 +53,4 @@ public class View extends JFrame {
 		
 		
 	}
-}
+}*/
